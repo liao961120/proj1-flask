@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ username }}'s Page
+{% endblock %}
+
+{% block body %}
+    <div>
+        <h2>{{ username }}'s Books</h2>
+        <ul>
+            {% for book in my_books %}
+                <li>{{ book.title }} by {{ book.author }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
