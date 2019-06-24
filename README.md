@@ -1,6 +1,6 @@
 # Web Programming with Python and JavaScript: Project 1
 
-## GOAL
+## Goal
 
 <https://docs.cs50.net/web/2018/x/projects/1/project1.html>
 
