@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Flights
+    Search Book
 {% endblock %}
 
 {% block body %}
@@ -34,7 +34,10 @@
     {% else %}
         <ol>
         {% for book in query_result %}
-            <li><i>{{ book.title }}</i> by {{ book.author }} &nbsp;&nbsp;ISBN: {{ book.isbn }}</li>
+            <li>
+                <a href="{{ url_for('book', book_id=book.id) }}"><i>{{ book.title }}</i></a>
+                     by {{ book.author }} &nbsp;&nbsp;ISBN: {{ book.isbn }}
+            </li>
         {% endfor %}
         </ol>
     {% endif %}

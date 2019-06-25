@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ book_info.title }}
+{% endblock %}
+
+{% block body %}
+<style>
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    padding-top: 3px;
+    padding-left: 10%;
+    padding-right: 10%;
+    width: 100%;
+    background-color: rgba(195, 209, 255, 0.3);
+}
+</style>
+
+
+<div class="book_info">
+    <h2>{{ book_info.title }}</h2>
+    <ul>
+        <li>by <b>{{ book_info.author }}</b></li>
+        <li>Year: <b>{{ book_info.year }}</b></li>
+        <li>ISBN: <b>{{ book_info.isbn }}</b></li>
+    </ul>
+
+    {% if 'notfound' not in goodread_review %}
+        <h3>Goodreads</h3>
+        <ul>
+            <li>Avg. rating: <b>{{ goodread_review.average_rating }}</b></li>
+            <li>Num. of ratings: <b>{{ goodread_review.work_ratings_count }}</b></li>
+        </ul>
+    {% endif %}
+
+    <h3>Reviews</h3>
+    <ol>
+        {% for review in reviews %}
+            <li>Rating: <b>{{ review.rating }}</b><br>
+                Comment: <b>{{ review.comment }}</b>
+            </li>
+        {% endfor %}
+    </ol>
+
+    <footer class="page-footer font-small blue">
+        <h3>Submit Review</h3>
+        <form action="{{ url_for('submit_review', book_id=book_info.id) }}" method="post">
+            <h4>Rating</h4>
+            <div class="form-group">
+                1 <input type="range" min="1" max="5" name="rating"> 5
+            </div>
+            <h4>Comment</h4>
+            <div class="form-group">
+                <input class="form-control" name="comment" placeholder="comment">
+            </div>
+
+            <div class="form-group">
+                <button type='submit' class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </footer>
+
+</div>
+{% endblock %}
