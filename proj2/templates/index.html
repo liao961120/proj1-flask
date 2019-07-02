@@ -1,123 +1,17 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-        <script src="{{ url_for('static', filename='displayname.js') }}"></script>
-        <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Connect to websocket
-            var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+{% extends "layout.html" %}
 
-            socket.on('connect', () => {
-                // Request data on connect
-                socket.emit('update channel');
-
-                // Create new channel
-                document.querySelector('button#createChannel-submit').onclick = () => {
-                    const id = document.querySelector('input#createChannel').value.trim().replace(/\s+/g, '-')
-
-                    // Check empty channel name
-                    if (!id) {alert('Empty Channel name not allowed'); return;}
-
-                    // Check conflicting channel names
-                    const curr_channels = document.querySelectorAll('.channel')
-                    let currChannelIds = getCurrChannelIDs();
-                    if (currChannelIds.includes(id)) {alert('Channel name already used!'); return;}
-
-                    // Send new channel id to server
-                    socket.emit('create channel', {'channel-id': id});
-                };
-
-                // Send message to a channel
-                // submit form data (form created by loadChannel())
-
-            });//end socker connect
-
-            // Create and/or update channel and messages
-            socket.on('update', data => updateChannel(data));
-
-        });// end DOMContentLoaded
-
-        // helpers
-        function updateChannel(json) {
-            let ids = Object.keys(json);
-            let currChannelIds = getCurrChannelIDs();
-            ids.forEach(channel_id => {
-                // Update existing channel
-                if (currChannelIds.includes(channel_id)) {
-                    loadChannel(json[channel_id]);
-                // Create New channel if ID not found
-                } else {
-                    createChannel(channel_id);
-                    loadChannel(json[channel_id]);
-                };
-            });
-        };
-
-        function createChannel(id) {
-            const div = document.createElement('div');
-            div.className = 'channel';
-            div.id = id;
-            div.innerHTML = `This is channel ${id}`
-            // Add New channel
-            document.querySelector('.channels').append(div);
-        };
-
-        function loadChannel(json) {
-            // Title
-            const title = document.createElement('h2');
-            title.innerHTML = `Channel: ${json.id.replace(/\-/g, ' ')}`;
-
-            // Message element
-            const messages = document.createElement('div');
-            messages.className = 'messages';
-            let message_lst = document.createElement('ol');
-            for (i=0; i < json.messages.length; ++i) {
-                let message = document.createElement('li');
-                message.innerHTML = json.messages[i];
-                message_lst.append(message);
-            };
-            messages.append(message_lst);
-
-            // message input
-
-            // Update div#channel-id
-            let div = document.createElement('div');
-            div.append(title);
-            div.append(messages);
-            document.querySelector(`#${json.id}`).innerHTML = div.innerHTML;
-        };
-
-        function getCurrChannelIDs() {
-            const curr_channels = document.querySelectorAll('.channel');
-                let curr_channel_ids = [];
-                for (i = 0; i < curr_channels.length; ++i) {
-                    curr_channel_ids.push(curr_channels[i].id);
-                };
-            return curr_channel_ids;
-        };
-        </script>
+{% block javascript %}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.slim.js"></script>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+    <script src="{{ url_for('static', filename='displayname.js') }}"></script>
+{% endblock %}
 
 
-
-        <title>Chat Room</title>
-    </head>
-
-    <body>
-        <div id="displayName"></div>
-        <br>
-        <div class='displayName'>
-            <input id="display" autocomplete="off" autofocus placeholder="Display Name" type="text">
-            <button id='newDisplayName'>Enter Name</button>
-        </div>
-            <button id='updateDisplayName'>Change Display Name</button>
-        
-        <br>
-        <div class="channels"></div>
-            
-        <div class='createChannel'>
-            <input id='createChannel' placeholder="Channel Name" type="text">
-            <button id='createChannel-submit'>Create Channel</button>
-        </div>
-    </body>
-</html>
+{% block body %}
+<div class="channels"></div>
+    
+<div class='createChannel'>
+    <input id='createChannel' placeholder="Channel Name" type="text">
+    <button id='createChannel-submit'>Create Channel</button>
+</div>
+{% endblock %}

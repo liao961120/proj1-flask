@@ -1,0 +1,13 @@
+.message-box {
+    max-height: 20em; 
+    overflow-y: scroll;
+}
+
+.message-input {
+    left:10px;
+    bottom:20px;
+}
+
+footer {
+    flex-shrink:none;
+}
