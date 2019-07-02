@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Channel: {{ channel_id }}
+{% endblock %}
+
+{% block javascript %}
+    <script src="{{ url_for('static', filename='channel.js') }}"></script>
+    <script src="{{ url_for('static', filename='displayname.js') }}"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.slim.js"></script>
+{% endblock %}
+
+{% block body %}
+    <div id="messages" class='message-box'></div>
+{% endblock %}
+
+{% block footer %}
+    <footer class='py-4 text-center'>
+        <div class="message-input container">
+            <textarea id='myMessage' cols="40" rows="5" placeholder="My Message"></textarea>
+            <button id='send'>Send</button>
+        </div>
+    </footer>
+{% endblock %}
